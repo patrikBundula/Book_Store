@@ -6,7 +6,8 @@ namespace Book_Store
 
     public class BookStoreContext : DbContext
     {
-        //public DbSet<Books> Books { get; set; }
+        public DbSet<Books> Books { get; set; }
+        public DbSet<Author> Authors { get; set; }
 
         public BookStoreContext()
         {
