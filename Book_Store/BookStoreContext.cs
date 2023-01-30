@@ -9,16 +9,20 @@ namespace Book_Store
         public DbSet<Books> Books { get; set; }
         public DbSet<Author> Authors { get; set; }
 
-        public BookStoreContext()
-        {
+        public DbSet<Category> Categories { get; set; }
 
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public BookStoreContext(DbContextOptions<BookStoreContext> options) : base(options)
         {
-            optionsBuilder.UseMySql(connectionString: "server=localhost;database=book_store;user=root;password=qpu0DF00", ServerVersion.AutoDetect("server=localhost;database=book_store;user=root;password=qpu0DF00"));
-
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseMySql(connectionString: "server=localhost;database=book_store;user=root;password=qpu0DF00", ServerVersion.AutoDetect("server=localhost;database=book_store;user=root;password=qpu0DF00"));
+
+        //}
+
+
 
     }
+
 
 }
