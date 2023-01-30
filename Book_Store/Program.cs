@@ -18,8 +18,6 @@ builder.Services.AddDbContext<BookStoreContext>(options =>
 
 builder.Services.AddScoped<IBookAppService, BookStoreAppService>();
 
-
-
 //var context = new BookStoreContext();
 //var books = context.Books.Where(b => b.Author.Id == 1)
 //    .OrderBy(c => c.Title)

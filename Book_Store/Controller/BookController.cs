@@ -17,6 +17,7 @@ namespace Book_Store.Controller
         public async Task<IActionResult> Get()
         {
             IEnumerable<Books> books = await _dataRepository.GetAllBooks();
+
             return Ok(books);
         }
     }
