@@ -1,5 +1,6 @@
 ﻿using Book_Store.Interface;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace Book_Store.Services
 {
@@ -15,8 +16,14 @@ namespace Book_Store.Services
 
         public async Task<List<Books>> GetAllBooks()
         {
-            var books = await _bookStoreContext.Books.ToListAsync();
-            return books;
+            return await _bookStoreContext.Books.ToListAsync();
+
+        }
+
+
+        public async Task<Books> GetBookInfo(int bookId)
+        {
+            return await _bookStoreContext.Books.Where(b => b.Id == bookId).FirstOrDefaultAsync();
         }
     }
 }
