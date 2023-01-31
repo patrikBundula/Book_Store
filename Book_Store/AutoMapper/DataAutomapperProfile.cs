@@ -8,6 +8,7 @@ namespace Book_Store.AutoMapper
         public DataAutomapperProfile()
         {
             CreateMap<BookDto, Books>().ReverseMap();
+            CreateMap<EditBookDto, Books>().ReverseMap();
         }
 
     }

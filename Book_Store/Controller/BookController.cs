@@ -1,9 +1,12 @@
 ﻿using Book_Store.Dtos;
 using Book_Store.Interface;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 
 namespace Book_Store.Controller
 {
+    [ApiController]
+    [Route("[controller]")]
     public class BookController : ControllerBase
     {
         private readonly IBookAppService _dataRepository;
@@ -13,39 +16,50 @@ namespace Book_Store.Controller
             _dataRepository = dataRepository;
         }
 
-        [Route("api/books")]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public ActionResult<Books> Get()
         {
-            var books = await _dataRepository.GetAllBooks();
+            var books = _dataRepository.GetAllBooks();
 
             if (books == null) return BadRequest("Db is empty");
 
             return Ok(books);
         }
-        [Route("api/books/{bookId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetBookInfo(int bookId)
+        [HttpGet("{bookId}")]
+        public ActionResult<Books> GetBookInfo(int bookId)
         {
-            var book = await _dataRepository.GetBookInfo(bookId);
+            var book = _dataRepository.GetBookInfo(bookId);
 
             if (book == null) return BadRequest("There was an issue finding the book");
 
             return Ok(book);
         }
-        [Route("api/books")]
         [HttpPost]
-        public async Task<IActionResult> AddNewBook(BookDto book)
+        public ActionResult<int> AddNewBook([FromBody] BookDto book)
         {
-            var result = await _dataRepository.AddNewBook(book);
+            var result = _dataRepository.AddNewBook(book);
 
-            if (!result.Succeeded)
+            if (result is null)
             {
-                return BadRequest("Internal Error, can not add new book");
+                return BadRequest("Something went wrong, can not be added a new book");
             }
 
-            return Ok();
+            return Ok(result.Value);
 
         }
+        [HttpPut]
+        public ActionResult<Books> EditBook([FromBody] EditBookDto book)
+        {
+            var result = _dataRepository.EditBook(book);
+
+            if (result is null)
+            {
+                return BadRequest("Something went wrong, can not be added a new book");
+            }
+
+            return Ok(result);
+        }
+
+
     }
 }

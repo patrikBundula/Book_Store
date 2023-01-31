@@ -2,10 +2,10 @@
 
 namespace Book_Store.Dtos
 {
-    public class BookDto
-
+    public class EditBookDto
     {
-        //public int Id { get; set; }
+        [Required]
+        public int Id { get; set; }
         [Required(ErrorMessage = "Please enter the title of the book")]
         [MaxLength(255)]
         public string Title { get; set; }

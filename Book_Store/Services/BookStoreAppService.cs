@@ -19,33 +19,40 @@ namespace Book_Store.Services
             _mapper = mapper;
         }
 
-        public async Task<List<Books>> GetAllBooks()
+        public List<Books> GetAllBooks()
         {
-            return await _bookStoreContext.Books.ToListAsync();
+            return _bookStoreContext.Books.ToList();
 
         }
 
 
-        public async Task<Books> GetBookInfo(int bookId)
+        public Books GetBookInfo(int bookId)
         {
-            return await _bookStoreContext.Books.Where(b => b.Id == bookId).FirstOrDefaultAsync();
+            return _bookStoreContext.Books.FirstOrDefault(b => b.Id == bookId);
         }
 
-        public async Task<IdentityResult> AddNewBook([FromBody] BookDto book)
+        public int? AddNewBook(BookDto book)
         {
             var mappedResult = _mapper.Map<BookDto, Books>(book);
-            _bookStoreContext.Books.Add(mappedResult);
+            var bookEntity = _bookStoreContext.Books.Add(mappedResult);
 
-            var success = await _bookStoreContext.SaveChangesAsync() > 0;
+            var success = _bookStoreContext.SaveChanges() > 0;
 
-            if (!success)
-            {
-                return IdentityResult.Failed();
-            }
-
-            return IdentityResult.Success;
+            return success ? bookEntity.Entity.Id : null;
 
 
+        }
+
+        public Books EditBook(EditBookDto book)
+        {
+            var mappedResult = _mapper.Map<EditBookDto, Books>(book);
+            _bookStoreContext.Attach(mappedResult);
+
+
+            _bookStoreContext.Entry(mappedResult).State = EntityState.Modified;
+            _bookStoreContext.SaveChanges();
+
+            return mappedResult;
         }
     }
 }
