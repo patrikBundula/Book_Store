@@ -10,12 +10,10 @@ namespace Book_Store
         [Required]
         [MaxLength(255)]
         public string Title { get; set; }
-
         [Required]
-        [MaxLength(2000)]
         public string Description { get; set; }
 
-
+        [Required]
         public float Price { get; set; }
         public int AuthorId { get; set; }
         [ForeignKey("AuthorId")]

@@ -2,6 +2,7 @@ using Book_Store;
 using Book_Store.Services;
 using Book_Store.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +13,12 @@ builder.Services.AddDbContext<BookStoreContext>(options =>
     options.UseMySql(
         databaseConnectionString,
         ServerVersion.AutoDetect(databaseConnectionString),
-        o => o.MigrationsAssembly("Database").EnableRetryOnFailure()
+        o => o.MigrationsAssembly("Book_Store").EnableRetryOnFailure()
         );
 });
 
 builder.Services.AddScoped<IBookAppService, BookStoreAppService>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 //var context = new BookStoreContext();
 //var books = context.Books.Where(b => b.Author.Id == 1)

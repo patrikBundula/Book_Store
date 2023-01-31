@@ -1,4 +1,5 @@
-﻿using Book_Store.Interface;
+﻿using Book_Store.Dtos;
+using Book_Store.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Book_Store.Controller
@@ -24,13 +25,27 @@ namespace Book_Store.Controller
         }
         [Route("api/books/{bookId}")]
         [HttpGet]
-        public async Task<ActionResult> GetBookInfo(int bookId)
+        public async Task<IActionResult> GetBookInfo(int bookId)
         {
             var book = await _dataRepository.GetBookInfo(bookId);
 
             if (book == null) return BadRequest("There was an issue finding the book");
 
             return Ok(book);
+        }
+        [Route("api/books")]
+        [HttpPost]
+        public async Task<IActionResult> AddNewBook(BookDto book)
+        {
+            var result = await _dataRepository.AddNewBook(book);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Internal Error, can not add new book");
+            }
+
+            return Ok();
+
         }
     }
 }
