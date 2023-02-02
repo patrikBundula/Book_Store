@@ -39,23 +39,39 @@ namespace Book_Store.Controller
         {
             var result = _dataRepository.AddNewBook(book);
 
-            if (result is null)
+            if (_dataRepository.GetAuthorById(book.AuthorId) is null)
             {
-                return BadRequest("Something went wrong, can not be added a new book");
+                return BadRequest("Sorry Author is not found");
             }
+
+            if (_dataRepository.GetCategoryById(book.CategoryId) is null)
+            {
+                return BadRequest("Sorry Category is not found");
+
+            }
+
+
 
             return Ok(result.Value);
 
         }
         [HttpPut]
-        public ActionResult<Books> EditBook([FromBody] EditBookDto book)
+        public ActionResult<Books> EditBook([FromBody] BookDto book)
         {
-            var result = _dataRepository.EditBook(book);
 
-            if (result is null)
+            if (_dataRepository.GetAuthorById(book.AuthorId) is null)
             {
-                return BadRequest("Something went wrong, can not be added a new book");
+                return BadRequest("Sorry Author is not found");
             }
+
+            if (_dataRepository.GetCategoryById(book.CategoryId) is null)
+            {
+                return BadRequest("Sorry Category is not found");
+
+            }
+
+
+            var result = _dataRepository.EditBook(book);
 
             return Ok(result);
         }

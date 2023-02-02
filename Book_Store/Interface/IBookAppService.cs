@@ -9,8 +9,10 @@ namespace Book_Store.Interface
 
         int? AddNewBook(BookDto book);
 
-        Books? EditBook(EditBookDto book);
+        Books? EditBook(BookDto book);
 
+        Author GetAuthorById(int authorId);
 
+        Category GetCategoryById(int categoryId);
     }
 }

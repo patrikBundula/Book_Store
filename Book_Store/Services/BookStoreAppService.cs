@@ -31,6 +31,15 @@ namespace Book_Store.Services
             return _bookStoreContext.Books.FirstOrDefault(b => b.Id == bookId);
         }
 
+        public Author GetAuthorById(int authorId)
+        {
+            return _bookStoreContext.Authors.FirstOrDefault(auth => auth.Id == authorId);
+        }
+
+        public Category GetCategoryById(int categoryId)
+        {
+            return _bookStoreContext.Categories.FirstOrDefault(cat => cat.Id == categoryId);
+        }
         public int? AddNewBook(BookDto book)
         {
             var mappedResult = _mapper.Map<BookDto, Books>(book);
@@ -43,9 +52,9 @@ namespace Book_Store.Services
 
         }
 
-        public Books EditBook(EditBookDto book)
+        public Books EditBook(BookDto book)
         {
-            var mappedResult = _mapper.Map<EditBookDto, Books>(book);
+            var mappedResult = _mapper.Map<BookDto, Books>(book);
             _bookStoreContext.Attach(mappedResult);
 
 
@@ -54,5 +63,7 @@ namespace Book_Store.Services
 
             return mappedResult;
         }
+
+
     }
 }
