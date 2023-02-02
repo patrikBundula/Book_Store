@@ -56,12 +56,16 @@ namespace Book_Store.Services
         {
             var mappedResult = _mapper.Map<BookDto, Books>(book);
             _bookStoreContext.Attach(mappedResult);
-
-
             _bookStoreContext.Entry(mappedResult).State = EntityState.Modified;
             _bookStoreContext.SaveChanges();
 
             return mappedResult;
+        }
+
+        public void DeleteBookById(int bookId)
+        {
+            _bookStoreContext.Remove(_bookStoreContext.Books.FirstOrDefault(b => b.Id == bookId));
+            _bookStoreContext.SaveChanges();
         }
 
 

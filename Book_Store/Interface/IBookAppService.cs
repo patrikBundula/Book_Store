@@ -14,5 +14,7 @@ namespace Book_Store.Interface
         Author GetAuthorById(int authorId);
 
         Category GetCategoryById(int categoryId);
+
+        void DeleteBookById(int bookId);
     }
 }

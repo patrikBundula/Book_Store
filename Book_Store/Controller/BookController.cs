@@ -76,6 +76,20 @@ namespace Book_Store.Controller
             return Ok(result);
         }
 
+        [HttpDelete("{bookId}")]
+        public ActionResult DeleteBook(int bookId)
+        {
+
+            if (_dataRepository.GetBookInfo(bookId) is null)
+            {
+                return BadRequest("There was an issue finding the book");
+            }
+
+            _dataRepository.DeleteBookById(bookId);
+
+            return Ok();
+        }
+
 
     }
 }

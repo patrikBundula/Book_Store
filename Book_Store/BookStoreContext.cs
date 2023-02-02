@@ -11,6 +11,13 @@ namespace Book_Store
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<CustomerOrder> CustomerOrders { get; set; }
+        public DbSet<OrderLine> OrderLines { get; set; }
+        public DbSet<ShippingMethod> ShippingMethods { get; set; }
+
         public BookStoreContext(DbContextOptions<BookStoreContext> options) : base(options)
         {
         }
