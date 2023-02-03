@@ -76,6 +76,9 @@ namespace BookStore.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<float>("Price")
                         .HasColumnType("float");
 

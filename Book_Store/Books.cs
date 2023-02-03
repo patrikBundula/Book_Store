@@ -23,6 +23,7 @@ namespace Book_Store
         [ForeignKey("CategoryId")]
         [JsonIgnore]
         public virtual Category Category { get; set; }
+        public bool IsDeleted { get; set; }
 
     }
 }
