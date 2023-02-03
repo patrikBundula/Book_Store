@@ -1,8 +1,8 @@
 using Book_Store;
-using Book_Store.Services;
 using Book_Store.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Book_Store.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +17,7 @@ builder.Services.AddDbContext<BookStoreContext>(options =>
         );
 });
 
-builder.Services.AddScoped<IBookAppService, BookStoreAppService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 //var context = new BookStoreContext();
