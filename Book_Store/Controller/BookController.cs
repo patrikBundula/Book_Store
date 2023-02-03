@@ -1,7 +1,7 @@
 ﻿using Book_Store.Dtos;
 using Book_Store.Interface;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
+using AutoMapper;
 
 namespace Book_Store.Controller
 {
@@ -9,17 +9,20 @@ namespace Book_Store.Controller
     [Route("[controller]")]
     public class BookController : ControllerBase
     {
-        private readonly IBookAppService _dataRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public BookController(IBookAppService dataRepository)
+
+        public BookController(IUnitOfWork unitOfWork)
         {
-            _dataRepository = dataRepository;
+            _unitOfWork = unitOfWork;
+
         }
 
         [HttpGet]
-        public ActionResult<Books> Get()
+        public ActionResult<Books> GetAll()
         {
-            var books = _dataRepository.GetAllBooks();
+            var books = _unitOfWork.BookRepository.GetAll();
 
             if (books == null) return BadRequest("Db is empty");
 
@@ -28,50 +31,52 @@ namespace Book_Store.Controller
         [HttpGet("{bookId}")]
         public ActionResult<Books> GetBookInfo(int bookId)
         {
-            var book = _dataRepository.GetBookInfo(bookId);
+            var book = _unitOfWork.BookRepository.Get(bookId);
 
             if (book == null) return BadRequest("There was an issue finding the book");
 
             return Ok(book);
         }
         [HttpPost]
-        public ActionResult<int> AddNewBook([FromBody] BookDto book)
+        public ActionResult AddNewBook([FromBody] BookDto book)
         {
-            var result = _dataRepository.AddNewBook(book);
+            var mappedBook = _mapper.Map<BookDto, Books>(book);
 
-            if (_dataRepository.GetAuthorById(book.AuthorId) is null)
+
+            if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
             {
                 return BadRequest("Sorry Author is not found");
             }
 
-            if (_dataRepository.GetCategoryById(book.CategoryId) is null)
+            if (_unitOfWork.BookRepository.GetCategoryById(book.CategoryId) is null)
             {
                 return BadRequest("Sorry Category is not found");
 
             }
 
 
+            _unitOfWork.BookRepository.Add(mappedBook);
 
-            return Ok(result.Value);
+            return Ok();
 
         }
         [HttpPut]
         public ActionResult<Books> EditBook([FromBody] BookDto book)
         {
 
-            if (_dataRepository.GetAuthorById(book.AuthorId) is null)
+            if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
             {
                 return BadRequest("Sorry Author is not found");
             }
 
-            if (_dataRepository.GetCategoryById(book.CategoryId) is null)
+            if (_unitOfWork.BookRepository.GetCategoryById(book.CategoryId) is null)
             {
                 return BadRequest("Sorry Category is not found");
 
             }
 
 
-            var result = _dataRepository.EditBook(book);
+            var result = _unitOfWork.BookRepository.EditBook(book);
 
             return Ok(result);
         }
@@ -80,12 +85,12 @@ namespace Book_Store.Controller
         public ActionResult DeleteBook(int bookId)
         {
 
-            if (_dataRepository.GetBookInfo(bookId) is null)
+            if (_unitOfWork.BookRepository.Get(bookId) is null)
             {
                 return BadRequest("There was an issue finding the book");
             }
 
-            _dataRepository.DeleteBookById(bookId);
+            _unitOfWork.BookRepository.DeleteBookById(bookId);
 
             return Ok();
         }
