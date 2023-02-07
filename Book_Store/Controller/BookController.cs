@@ -12,13 +12,14 @@ namespace Book_Store.Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<BookController> _logger;
 
 
-        public BookController(IUnitOfWork unitOfWork, IMapper mapper)
+        public BookController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<BookController> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-
+            _logger = logger;
         }
 
         [HttpGet]
@@ -34,33 +35,53 @@ namespace Book_Store.Controller
         public ActionResult<BookDto> GetBookInfo(int bookId)
         {
             var book = _unitOfWork.BookRepository.Get(bookId);
+            var errorMessage = $"Book with id {bookId} was not found";
 
+            if (book == null)
+            {
+                _logger.LogInformation(errorMessage);
 
-            if (book == null) return NotFound(string.Format("Book with id = {0} not found", bookId));
+                return NotFound(errorMessage);
+            }
 
             return Ok(book);
         }
         [HttpPost]
-        public ActionResult AddNewBook([FromBody] BookDto book)
+        public ActionResult<uint> AddNewBook([FromBody] BookDto book)
         {
             var mappedBook = _mapper.Map<BookDto, Books>(book);
 
 
             if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
             {
-                return NotFound(string.Format("Author with id = {0} not found", book.AuthorId));
+                var errorMessage = $"Author with this id ={book.AuthorId} was not found";
+
+                _logger.LogInformation(errorMessage);
+
+                return NotFound(errorMessage);
             }
 
             if (_unitOfWork.BookRepository.GetCategoryById(book.CategoryId) is null)
             {
-                return NotFound(string.Format("Book with id = {0} not found", book.CategoryId));
+                var errorMessage = $"Category with id= {book.CategoryId} was not found";
+
+                _logger.LogInformation(errorMessage);
+
+                return NotFound(errorMessage);
+
+            }
+            try
+            {
+                _unitOfWork.BookRepository.Add(mappedBook);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
 
             }
 
-
-            _unitOfWork.BookRepository.Add(mappedBook);
-
-            return Ok();
 
         }
         [HttpPut]
@@ -69,19 +90,33 @@ namespace Book_Store.Controller
 
             if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
             {
-                return NotFound(string.Format("Author with id = {0} not found", book.AuthorId));
+                var errorMessage = $"Author with this id ={book.AuthorId} was not found";
+                
+                _logger.LogInformation(errorMessage);
+
+                return NotFound(errorMessage);
             }
 
             if (_unitOfWork.BookRepository.GetCategoryById(book.CategoryId) is null)
             {
-                return NotFound(string.Format("Book with id = {0} not found", book.CategoryId));
+                var errorMessage = $"Category with id= {book.CategoryId} was not found";
+
+                _logger.LogInformation(errorMessage);
+
+                return NotFound(errorMessage);
 
             }
 
+            try
+            {
+                return Ok(_unitOfWork.BookRepository.EditBook(book));
 
-            var result = _unitOfWork.BookRepository.EditBook(book);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
 
-            return Ok(result);
+            }
         }
 
         [HttpDelete("{bookId}")]
@@ -90,7 +125,7 @@ namespace Book_Store.Controller
 
             if (_unitOfWork.BookRepository.Get(bookId) is null)
             {
-                return NotFound(string.Format("Book with id = {0} not found", bookId));
+                return NotFound($"Book with id {bookId} was not found");
             }
 
             _unitOfWork.BookRepository.DeleteBookById(bookId);
