@@ -22,7 +22,7 @@ namespace Book_Store.Controller
         }
 
         [HttpGet]
-        public ActionResult<Books> GetAll()
+        public ActionResult<BookDto> GetAll()
         {
             var books = _unitOfWork.BookRepository.GetAll();
 
@@ -31,7 +31,7 @@ namespace Book_Store.Controller
             return Ok(books);
         }
         [HttpGet("{bookId}")]
-        public ActionResult<Books> GetBookInfo(int bookId)
+        public ActionResult<BookDto> GetBookInfo(int bookId)
         {
             var book = _unitOfWork.BookRepository.Get(bookId);
 
@@ -64,7 +64,7 @@ namespace Book_Store.Controller
 
         }
         [HttpPut]
-        public ActionResult<Books> EditBook([FromBody] BookDto book)
+        public ActionResult<BookDto> EditBook([FromBody] BookDto book)
         {
 
             if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
