@@ -26,7 +26,7 @@ namespace Book_Store.Controller
         {
             var books = _unitOfWork.BookRepository.GetAll();
 
-            if (books == null) return BadRequest("Db is empty");
+            if (books == null) return NotFound("Db is empty");
 
             return Ok(books);
         }
@@ -36,7 +36,7 @@ namespace Book_Store.Controller
             var book = _unitOfWork.BookRepository.Get(bookId);
 
 
-            if (book == null) return BadRequest(string.Format("Book with id = {0} not found", bookId));
+            if (book == null) return NotFound(string.Format("Book with id = {0} not found", bookId));
 
             return Ok(book);
         }
@@ -48,12 +48,12 @@ namespace Book_Store.Controller
 
             if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
             {
-                return BadRequest(string.Format("Author with id = {0} not found", book.AuthorId));
+                return NotFound(string.Format("Author with id = {0} not found", book.AuthorId));
             }
 
             if (_unitOfWork.BookRepository.GetCategoryById(book.CategoryId) is null)
             {
-                return BadRequest(string.Format("Book with id = {0} not found", book.CategoryId));
+                return NotFound(string.Format("Book with id = {0} not found", book.CategoryId));
 
             }
 
@@ -69,12 +69,12 @@ namespace Book_Store.Controller
 
             if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
             {
-                return BadRequest(string.Format("Author with id = {0} not found", book.AuthorId));
+                return NotFound(string.Format("Author with id = {0} not found", book.AuthorId));
             }
 
             if (_unitOfWork.BookRepository.GetCategoryById(book.CategoryId) is null)
             {
-                return BadRequest(string.Format("Book with id = {0} not found", book.CategoryId));
+                return NotFound(string.Format("Book with id = {0} not found", book.CategoryId));
 
             }
 
@@ -90,7 +90,7 @@ namespace Book_Store.Controller
 
             if (_unitOfWork.BookRepository.Get(bookId) is null)
             {
-                return BadRequest(string.Format("Book with id = {0} not found", bookId));
+                return NotFound(string.Format("Book with id = {0} not found", bookId));
             }
 
             _unitOfWork.BookRepository.DeleteBookById(bookId);

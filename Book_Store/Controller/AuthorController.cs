@@ -23,7 +23,7 @@ namespace Book_Store.Controller
 
             var authors = _unitOfWork.AuthorRepository.GetAll();
 
-            if (authors == null) return BadRequest("No Authors in the Db");
+            if (authors == null) return NotFound("No Authors in the Db");
 
             return Ok(authors);
         }
@@ -34,7 +34,7 @@ namespace Book_Store.Controller
 
             if (author == null)
             {
-                return BadRequest(string.Format("Author with id = {0} not found", id)
+                return NotFound(string.Format("Author with id = {0} not found", id)
 );
             }
 
