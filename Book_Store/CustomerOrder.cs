@@ -11,7 +11,7 @@ namespace Book_Store
         public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [JsonIgnore]
-        public virtual Customer Customer { get; set; }
+        //public virtual Customer Customer { get; set; }
 
         public int ShippingMethodId { get; set; }
         [ForeignKey("ShippingMethodId")]
