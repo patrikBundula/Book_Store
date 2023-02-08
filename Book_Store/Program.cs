@@ -5,6 +5,7 @@ using System.Reflection;
 using Book_Store.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
 var databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<BookStoreContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+builder.Services.ConfigureIdentity(configuration);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -29,15 +32,18 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
