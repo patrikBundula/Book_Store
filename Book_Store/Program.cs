@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Book_Store.Repositories;
 
-var builder = WebApplication.CreateBuilder(args);
-ConfigurationManager configuration = builder.Configuration;
+var _modelBuilder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = _modelBuilder.Configuration;
 
-var databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var databaseConnectionString = _modelBuilder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<BookStoreContext>(options =>
+_modelBuilder.Services.AddDbContext<BookStoreContext>(options =>
 {
     options.UseMySql(
         databaseConnectionString,
@@ -18,19 +18,19 @@ builder.Services.AddDbContext<BookStoreContext>(options =>
         );
 });
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+_modelBuilder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+_modelBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-builder.Services.ConfigureIdentity(configuration);
+_modelBuilder.Services.ConfigureIdentity(configuration);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+_modelBuilder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+_modelBuilder.Services.AddEndpointsApiExplorer();
+_modelBuilder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+var app = _modelBuilder.Build();
 
 
 // Configure the HTTP request pipeline.

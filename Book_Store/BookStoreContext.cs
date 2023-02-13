@@ -31,7 +31,9 @@ namespace Book_Store
             base.OnModelCreating(builder);
 
 
+            new DbInitializer(builder).Seed();
         }
+
 
     }
 
