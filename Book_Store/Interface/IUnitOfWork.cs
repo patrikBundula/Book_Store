@@ -5,5 +5,7 @@
         IAuthorRepository AuthorRepository { get; }
         IBookRepository BookRepository { get; }
 
+        IUserRepository<string, User> UserRepository { get; }
+
     }
 }
