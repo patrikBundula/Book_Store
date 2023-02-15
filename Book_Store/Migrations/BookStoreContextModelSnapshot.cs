@@ -260,9 +260,9 @@ namespace BookStore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6b147a14-86de-4afc-b573-4ee9f76c363b",
+                            Id = "795050ed-2e6d-45c7-a2c0-a44c14186a2d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e8b9d00a-a4b8-408a-85a0-4fc9565f3c2f",
+                            ConcurrencyStamp = "8ba0f4fc-6d55-4d28-8dc7-528bf09074a0",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             FirstName = "admin",
@@ -271,7 +271,7 @@ namespace BookStore.Migrations
                             Money = 0f,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM1sCVzUG+e8FlWV/8j8yFs/AVuzmFauGSKnPfDIJpeMRt9fAaZ7m3tauU5O/FHr3g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELrMlp/lj9BzeFG82CPyT+Y3SdC+C/InCMq6Q+5WguwCGPuE26l1QOj1lv5gA9uuVQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -307,15 +307,15 @@ namespace BookStore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c6284aff-ddde-415b-9e09-c5bae6cd4a44",
-                            ConcurrencyStamp = "a9f2fd39-8480-4028-b68f-4a7fda9917ad",
+                            Id = "a1d46f4c-f4eb-4204-88c1-07ae4354528c",
+                            ConcurrencyStamp = "4c601943-4775-45e0-a906-029435dc7bb0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "90c95ed7-a901-4969-85e4-169f892d803c",
-                            ConcurrencyStamp = "2bbfc084-0137-4087-97b7-d9ed7261c4ff",
+                            Id = "41f9740b-0884-4ae8-a69e-f424bcddd275",
+                            ConcurrencyStamp = "26420015-7938-4115-bd88-c0bdc452b92a",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -406,8 +406,8 @@ namespace BookStore.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "6b147a14-86de-4afc-b573-4ee9f76c363b",
-                            RoleId = "c6284aff-ddde-415b-9e09-c5bae6cd4a44"
+                            UserId = "795050ed-2e6d-45c7-a2c0-a44c14186a2d",
+                            RoleId = "a1d46f4c-f4eb-4204-88c1-07ae4354528c"
                         });
                 });
 
