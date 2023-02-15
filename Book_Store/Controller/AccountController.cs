@@ -9,7 +9,7 @@ namespace Book_Store.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -32,8 +32,7 @@ namespace Book_Store.Controller
         public async Task<IActionResult> Register([FromBody] RegistrationDto registrationDto)
         {
             var selectedRole = DefaultRoles.ValidRoles.FirstOrDefault(role => role.Equals(registrationDto.Role));
-            Console.WriteLine(selectedRole);
-            Console.WriteLine(registrationDto.Role);
+
             if (string.IsNullOrEmpty(selectedRole))
             {
                 return BadRequest("Not existing role!");
@@ -68,5 +67,28 @@ namespace Book_Store.Controller
             return roleResult.Succeeded ? Ok() : BadRequest("UserRole can not add");
         }
 
+
+        public async Task<ActionResult> Login(LoginDto loginDto)
+        {
+            //itt a NormalizedUserName alapból nagy betűs verzióban jelenik meg az adatbázisban ezért vizsgáljuk a ToUpper methódussal a párját.
+            var user = _unitOfWork.UserRepository.Get(user => user.NormalizedUserName == loginDto.Username.ToUpper());
+
+            if (user == null) return Unauthorized("Something went wrong upon login");
+
+            var validPassword = await _signInManager.UserManager.CheckPasswordAsync(user, loginDto.Password);
+
+            if (!validPassword) return Unauthorized("Something went wrong upon login");
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+            if (!result.Succeeded) return Unauthorized("Something went wrong upon login");
+
+
+            var dto = _mapper.Map<UserDto>(user);
+
+            //todo tokenService
+
+
+        }
     }
 }
