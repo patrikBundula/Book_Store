@@ -68,27 +68,27 @@ namespace Book_Store.Controller
         }
 
 
-        public async Task<ActionResult> Login(LoginDto loginDto)
-        {
-            //itt a NormalizedUserName alapból nagy betűs verzióban jelenik meg az adatbázisban ezért vizsgáljuk a ToUpper methódussal a párját.
-            var user = _unitOfWork.UserRepository.Get(user => user.NormalizedUserName == loginDto.Username.ToUpper());
+        //public async Task<ActionResult> Login(LoginDto loginDto)
+        //{
+        //    //itt a NormalizedUserName alapból nagy betűs verzióban jelenik meg az adatbázisban ezért vizsgáljuk a ToUpper methódussal a párját.
+        //    var user = _unitOfWork.UserRepository.Get(user => user.NormalizedUserName == loginDto.Username.ToUpper());
 
-            if (user == null) return Unauthorized("Something went wrong upon login");
+        //    if (user == null) return Unauthorized("Something went wrong upon login");
 
-            var validPassword = await _signInManager.UserManager.CheckPasswordAsync(user, loginDto.Password);
+        //    var validPassword = await _signInManager.UserManager.CheckPasswordAsync(user, loginDto.Password);
 
-            if (!validPassword) return Unauthorized("Something went wrong upon login");
+        //    if (!validPassword) return Unauthorized("Something went wrong upon login");
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+        //    var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded) return Unauthorized("Something went wrong upon login");
-
-
-            var dto = _mapper.Map<UserDto>(user);
-
-            //todo tokenService
+        //    if (!result.Succeeded) return Unauthorized("Something went wrong upon login");
 
 
-        }
+        //    var dto = _mapper.Map<UserDto>(user);
+
+        //    //todo tokenService
+
+
+        //}
     }
 }
