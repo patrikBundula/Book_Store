@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Book_Store.Interface;
-using Book_Store.Repositories;
-using Microsoft.EntityFrameworkCore;
+
+
 
 namespace Book_Store.Repositories
 {
@@ -14,10 +14,11 @@ namespace Book_Store.Repositories
 
 
 
-        public UnitOfWork(BookStoreContext dbContext, IMapper mapper)
+        public UnitOfWork(BookStoreContext dbContext, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _loggerFactory = loggerFactory;
         }
         public IUserRepository<string, User> UserRepository => new UserRepository(_mapper, _loggerFactory.CreateLogger<UserRepository>(), _dbContext);
         public IAuthorRepository AuthorRepository => new AuthorRepository(_dbContext, _mapper);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Book_Store.Dtos;
 using Book_Store.Interface;
+using Book_Store.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,8 @@ namespace Book_Store.Controller
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly BookStoreContext _db;
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<AccountController> logger, IMapper mapper, IUnitOfWork unitOfWork, BookStoreContext db)
+        private readonly ITokenService _tokenService;
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<AccountController> logger, IMapper mapper, IUnitOfWork unitOfWork, BookStoreContext db, ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -25,9 +27,10 @@ namespace Book_Store.Controller
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _db = db;
+            _tokenService = tokenService;
         }
         [Authorize(Policy = "RequireAdminRole")]
-        [HttpPost]
+        [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegistrationDto registrationDto)
         {
@@ -67,28 +70,28 @@ namespace Book_Store.Controller
             return roleResult.Succeeded ? Ok() : BadRequest("UserRole can not add");
         }
 
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        {
+            //itt a NormalizedUserName alapból nagy betűs verzióban jelenik meg az adatbázisban ezért vizsgáljuk a ToUpper methódussal a párját.
+            var user = _unitOfWork.UserRepository.Get(user => user.NormalizedUserName == loginDto.Username.ToUpper());
 
-        //public async Task<ActionResult> Login(LoginDto loginDto)
-        //{
-        //    //itt a NormalizedUserName alapból nagy betűs verzióban jelenik meg az adatbázisban ezért vizsgáljuk a ToUpper methódussal a párját.
-        //    var user = _unitOfWork.UserRepository.Get(user => user.NormalizedUserName == loginDto.Username.ToUpper());
+            if (user == null) return Unauthorized("Something went wrong upon login");
 
-        //    if (user == null) return Unauthorized("Something went wrong upon login");
+            var validPassword = await _signInManager.UserManager.CheckPasswordAsync(user, loginDto.Password);
 
-        //    var validPassword = await _signInManager.UserManager.CheckPasswordAsync(user, loginDto.Password);
+            if (!validPassword) return Unauthorized("Something went wrong upon login");
 
-        //    if (!validPassword) return Unauthorized("Something went wrong upon login");
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-        //    var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
-        //    if (!result.Succeeded) return Unauthorized("Something went wrong upon login");
-
-
-        //    var dto = _mapper.Map<UserDto>(user);
-
-        //    //todo tokenService
+            if (!result.Succeeded) return Unauthorized("Something went wrong upon login");
 
 
-        //}
+            var dto = _mapper.Map<UserDto>(user);
+            dto.Token = await _tokenService.CreateToken(user);
+            dto.RefreshToken = await _tokenService.CreateRefreshToken(user);
+            return dto;
+        }
     }
 }

@@ -3,6 +3,7 @@ using Book_Store.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Book_Store.Repositories;
+using Book_Store.Service;
 
 var _modelBuilder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = _modelBuilder.Configuration;
@@ -19,6 +20,7 @@ _modelBuilder.Services.AddDbContext<BookStoreContext>(options =>
 });
 
 _modelBuilder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+_modelBuilder.Services.AddScoped<ITokenService, TokenService>();
 _modelBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 _modelBuilder.Services.ConfigureIdentity(configuration);
