@@ -93,5 +93,18 @@ namespace Book_Store.Controller
             dto.RefreshToken = await _tokenService.CreateRefreshToken(user);
             return dto;
         }
+
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<TokenRequestDto>> RefreshToken([FromBody] TokenRequestDto tokenRequestDto)
+        {
+            var token = await _tokenService.ValidateRefreshToken(tokenRequestDto);
+            if (token == null)
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            return Ok(token);
+        }
     }
 }
