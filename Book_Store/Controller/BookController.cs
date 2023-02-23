@@ -1,8 +1,9 @@
-﻿using Book_Store.Dtos;
-using Book_Store.Interface;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using System.Net;
+using Model.Interface;
+using Model.Dtos;
+using Database.Entity;
 
 namespace Book_Store.Controller
 {
@@ -91,7 +92,7 @@ namespace Book_Store.Controller
             if (_unitOfWork.BookRepository.GetAuthorById(book.AuthorId) is null)
             {
                 var errorMessage = $"Author with this id ={book.AuthorId} was not found";
-                
+
                 _logger.LogInformation(errorMessage);
 
                 return NotFound(errorMessage);

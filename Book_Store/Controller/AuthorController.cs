@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Book_Store.Interface;
-using Microsoft.AspNetCore.Http;
+using Database.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Model.Interface;
 
 namespace Book_Store.Controller
 {

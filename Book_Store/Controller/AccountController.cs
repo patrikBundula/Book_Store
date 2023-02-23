@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
-using Book_Store.Dtos;
-using Book_Store.Interface;
-using Book_Store.Service;
+using Database;
+using Database.Entity;
+using Logic.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Model.Dtos;
+using Model.Interface;
 
 namespace Book_Store.Controller
 {

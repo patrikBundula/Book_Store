@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Data;
+using Database.Entity;
 
-
-namespace Book_Store
+namespace Database
 {
     public static class ServiceExtensions
     {

@@ -1,9 +1,10 @@
-using Book_Store;
-using Book_Store.Interface;
+using Database;
+using Logic.Repositories;
+using Logic.Service;
 using Microsoft.EntityFrameworkCore;
+using Model.Interface;
 using System.Reflection;
-using Book_Store.Repositories;
-using Book_Store.Service;
+
 
 var _modelBuilder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = _modelBuilder.Configuration;

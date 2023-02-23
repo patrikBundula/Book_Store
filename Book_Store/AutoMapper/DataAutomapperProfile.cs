@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Book_Store.Dtos;
+using Database.Entity;
+using Model.Dtos;
 
 namespace Book_Store.AutoMapper
 {
