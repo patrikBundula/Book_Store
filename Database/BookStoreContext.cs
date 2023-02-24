@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using System.Reflection.Emit;
 using Database.Entity;
+using Database.Entity.System;
 
 namespace Database
 {
@@ -21,6 +20,7 @@ namespace Database
         public DbSet<CustomerOrder> CustomerOrders { get; set; }
         public DbSet<OrderLine> OrderLines { get; set; }
         public DbSet<ShippingMethod> ShippingMethods { get; set; }
+        public DbSet<FileStore> FileStore { get; set; }
 
         public BookStoreContext(DbContextOptions<BookStoreContext> options) : base(options)
         {
