@@ -2,16 +2,18 @@ using Database;
 using Logic.Repositories;
 using Logic.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Model;
 using Model.Interface;
 using System.Reflection;
 
 
-var _modelBuilder = WebApplication.CreateBuilder(args);
-ConfigurationManager configuration = _modelBuilder.Configuration;
+var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
-var databaseConnectionString = _modelBuilder.Configuration.GetConnectionString("DefaultConnection");
+var databaseConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-_modelBuilder.Services.AddDbContext<BookStoreContext>(options =>
+builder.Services.AddDbContext<BookStoreContext>(options =>
 {
     options.UseMySql(
         databaseConnectionString,
@@ -19,21 +21,25 @@ _modelBuilder.Services.AddDbContext<BookStoreContext>(options =>
         o => o.MigrationsAssembly("Book_Store").EnableRetryOnFailure()
         );
 });
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-_modelBuilder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-_modelBuilder.Services.AddScoped<ITokenService, TokenService>();
-_modelBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.ConfigureIdentity(configuration);
 
-_modelBuilder.Services.ConfigureIdentity(configuration);
-
+builder.Services.AddOptions<AppConfig>()
+    .Bind(builder.Configuration.GetSection("AppConfig"));
 // Add services to the container.
 
-_modelBuilder.Services.AddControllers();
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-_modelBuilder.Services.AddEndpointsApiExplorer();
-_modelBuilder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-var app = _modelBuilder.Build();
+var app = builder.Build();
+
+var appConfig = app.Services.GetService<IOptions<AppConfig>>();
+builder.Services.ConfigureFileDirectory(builder.Configuration, appConfig);
 
 
 // Configure the HTTP request pipeline.

@@ -6,11 +6,14 @@ using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Data;
 using Database.Entity;
+using Microsoft.Extensions.Options;
+using Model;
 
 namespace Database
 {
     public static class ServiceExtensions
     {
+
         public static IServiceCollection ConfigureIdentity(this IServiceCollection services, IConfiguration config)
         {
             services.AddIdentityCore<User>(opt =>
@@ -68,6 +71,25 @@ namespace Database
 
 
             return services;
+        }
+
+        public static void ConfigureFileDirectory(this IServiceCollection services, IConfiguration config, IOptions<AppConfig> appConfig)
+        {
+            if (!string.IsNullOrWhiteSpace(appConfig.Value.TemplateGeneratedFilesPath))
+            {
+                var tempGenPath = Path.Combine(
+                    Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),
+                    appConfig.Value.TemplateGeneratedFilesPath);
+                Directory.CreateDirectory(tempGenPath);
+            }
+
+            if (!string.IsNullOrWhiteSpace(appConfig.Value.FileStorePath))
+            {
+                var tempGenPath = Path.Combine(
+                    Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),
+                    appConfig.Value.FileStorePath);
+                Directory.CreateDirectory(tempGenPath);
+            }
         }
     }
 }
