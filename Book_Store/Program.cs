@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Model;
 using Model.Interface;
+using Sentry.Extensions.Logging.Extensions.DependencyInjection;
 using System.Reflection;
 
 
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<BookStoreContext>(options =>
         o => o.MigrationsAssembly("Book_Store").EnableRetryOnFailure()
         );
 });
+builder.Logging.AddSentry();
+builder.WebHost.UseSentry();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -41,6 +44,7 @@ var app = builder.Build();
 var appConfig = app.Services.GetService<IOptions<AppConfig>>();
 builder.Services.ConfigureFileDirectory(builder.Configuration, appConfig);
 
+app.UseSentryTracing();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
