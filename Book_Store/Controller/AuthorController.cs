@@ -9,13 +9,11 @@ namespace Book_Store.Controller
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private IUnitOfWork _unitOfWork;
-        private IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AuthorController(IUnitOfWork unitOfWork, IMapper mapper)
+        public AuthorController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
         [HttpGet]
         public ActionResult<Author> GetAll()
