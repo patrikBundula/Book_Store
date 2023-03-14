@@ -41,6 +41,17 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<BookStoreContext>();
+    var modelBuilder = new ModelBuilder(); // create a new ModelBuilder instance
+    context.Database.EnsureCreated(); // ensure that the database has been created
+    DbInitializer.Seed(modelBuilder); // call the Seed method with the modelBuilder instance
+    context.SaveChanges(); // save changes to the database
+}
+
 var appConfig = app.Services.GetService<IOptions<AppConfig>>();
 builder.Services.ConfigureFileDirectory(builder.Configuration, appConfig);
 

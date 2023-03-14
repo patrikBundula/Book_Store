@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using DataBase;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 
@@ -11,7 +12,7 @@ namespace Database.Entity
         public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [JsonIgnore]
-        //public virtual Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; }
 
         public int ShippingMethodId { get; set; }
         [ForeignKey("ShippingMethodId")]

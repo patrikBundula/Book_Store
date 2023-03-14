@@ -3,6 +3,7 @@ using System;
 using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    partial class BookStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230314131855_init2")]
+    partial class init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,8 +154,6 @@ namespace BookStore.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("ShippingMethodId");
 
                     b.ToTable("CustomerOrders");
@@ -168,6 +169,9 @@ namespace BookStore.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("CustomOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MyProperty")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
@@ -188,12 +192,8 @@ namespace BookStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<float>("Cost")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Cost")
+                        .HasColumnType("int");
 
                     b.Property<string>("MethodName")
                         .IsRequired()
@@ -314,6 +314,27 @@ namespace BookStore.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d8b7db7c-24c0-43ed-b862-1482838df863",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "577478c3-76ed-4b40-b7e8-48f6cab5e378",
+                            Email = "admin@example.com",
+                            EmailConfirmed = true,
+                            FirstName = "admin",
+                            LastName = "admin",
+                            LockoutEnabled = false,
+                            Money = 0f,
+                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMXT2sQZoPyr1wQP6WoI4OYZG+WqBo24GjEtfxU5uMRLNcCuy4fbDzFgdCrXz2F3/Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -340,6 +361,22 @@ namespace BookStore.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4eeb4283-6499-4422-b649-893f91ef6c58",
+                            ConcurrencyStamp = "eaf0e678-50a3-4b0e-b4c7-89da4f37ecda",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "25c89d70-c37f-4803-9cb1-6b5cb64b5909",
+                            ConcurrencyStamp = "1d7b6727-5c0a-48f0-ba35-79dd52ab43fe",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -423,6 +460,13 @@ namespace BookStore.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "d8b7db7c-24c0-43ed-b862-1482838df863",
+                            RoleId = "4eeb4283-6499-4422-b649-893f91ef6c58"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -471,12 +515,6 @@ namespace BookStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataBase.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Database.Entity.ShippingMethod", "ShippingMethod")
                         .WithMany()
                         .HasForeignKey("ShippingMethodId")
@@ -484,8 +522,6 @@ namespace BookStore.Migrations
                         .IsRequired();
 
                     b.Navigation("Address");
-
-                    b.Navigation("Customer");
 
                     b.Navigation("ShippingMethod");
                 });

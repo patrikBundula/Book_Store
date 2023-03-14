@@ -6,7 +6,6 @@ namespace Database.Entity
     public class OrderLine
     {
         public int Id { get; set; }
-        public int MyProperty { get; set; }
 
         public int CustomOrderId { get; set; }
         [ForeignKey("CustomOrderId")]

@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using DataBase;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Database.Entity
 {

@@ -4,18 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database
 {
-    public class DbInitializer
+    public static class DbInitializer
     {
-        private readonly ModelBuilder _modelBuilder;
 
 
-
-        public DbInitializer(ModelBuilder modelBuilder)
-        {
-            _modelBuilder = modelBuilder;
-        }
-
-        public void Seed()
+        public static void Seed(ModelBuilder modelBuilder)
         {
             var hasher = new PasswordHasher<IdentityUser>();
             var newUser = new User()
@@ -38,13 +31,13 @@ namespace Database
 
 
             // Seed the aspNetUsers table
-            _modelBuilder.Entity<User>().HasData(newUser);
+            modelBuilder.Entity<User>().HasData(newUser);
 
             // Seed the aspNetRoles table
-            _modelBuilder.Entity<IdentityRole>().HasData(adminRole, customerRole);
+            modelBuilder.Entity<IdentityRole>().HasData(adminRole, customerRole);
 
             // Assign the admin role to the admin user
-            _modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
                 {
                     RoleId = adminRole.Id,

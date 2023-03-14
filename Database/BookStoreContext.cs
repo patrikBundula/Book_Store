@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Database.Entity;
 using Database.Entity.System;
+using DataBase;
 
 namespace Database
 {
@@ -13,8 +14,8 @@ namespace Database
 
         public DbSet<Category> Categories { get; set; }
 
-        //public DbSet<Customer> Customers { get; set; }
-        //public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
         public DbSet<CustomerOrder> CustomerOrders { get; set; }
@@ -25,16 +26,6 @@ namespace Database
         public BookStoreContext(DbContextOptions<BookStoreContext> options) : base(options)
         {
         }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-
-            new DbInitializer(builder).Seed();
-        }
-
-
     }
 
 
